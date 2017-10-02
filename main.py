@@ -1,5 +1,6 @@
 import datetime
 import praw
+import pickle
 
 class User:
 	def __init__(self,username,platform)
@@ -31,17 +32,55 @@ class RedditDev
 	def comment_reply(self,comment,reply_text)
 		comment.reply(reply_text)
 
-def is_lineup()
+def is_lineup(comment,Players)
+	#gets unique words/names in comment
+	WordsInComment = comment.split()
 
+	##HardCode for Goalienames
+	if ('Andersen' or 'Anderson') not in WordsInComment
+		WordsInComment.append('Andersen')
+	if ('McElhinney' or 'MacElhinney' or 'McBackup') not in WordsInComment
+		WordsInComment.append('McElhinney')
+		
+	#makes sure that there are no name typos in the comments
+	for word in WordsInComment
+		if word in Players
+			word = Players.get(player)
+		##May consider removing
+		elif
+			for knownPlayer in Players
+				if Levenshtein_Distance(player, knownPlayer) < 2
+					#Could be typo, maybe not
+					print(player + " may not be knownPlayer: " + knownPlayer + '. Check roster.")
+					player = Players.get(knownPlayer)
+					break
+		else
+			WordsInComment.remove(word)
+
+	#finds the number of players actually mentioned in the comment
+	PlayerList = WordsInComment
+	if len(list(PlayerList & setPlayers)) == 20
+		return PlayerList
+	else
+		return False
+	
+
+	
 		
 ##Create bot develop instance, and connect to the reddit API
 EarlbotDevDude = []
 reddit_connect = EarlbotDevDude.establish_api_connection()
 
+#loads known players into Player list.
+pkl_file = open('Players.pkl', 'rb')
+Players = pickle.load(pkl_file)
+pkl_file.close()
+
 ##
 for comment in EarlbotDevDude.subreddit('leafs').stream.comments():
-	if is_lineup
-		## Send array of players to google sheet
+	Lineup(comment,Players) = isLineup
+	if Lineup is not False
+		## Send list of players to google sheet
 		## Retreive data from google sheeet
 		## Format data from google sheet
 		## Reply to comment with text
